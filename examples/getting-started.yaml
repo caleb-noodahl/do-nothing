@@ -1,0 +1,12 @@
+- name: git pull
+  desc: pull the code back from github
+  cmds:
+  - git clone https://github.com/caleb-noodahl/do-nothing.git
+- name: dependency restore
+  desc: download the dependencies specified in the go.mod file
+  cmds:
+  - go mod download
+- name: build
+  desc: make a build creating a do-nothing.exe file
+  cmds:
+  - go build .
