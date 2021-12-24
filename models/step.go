@@ -8,7 +8,7 @@ import (
 type Step struct {
 	Name        string   `yaml:"name"`
 	Description string   `yaml:"desc"`
-	Cmds        []string `yaml:"cmd"`
+	Cmds        []string `yaml:"cmds"`
 }
 
 func (s Step) NameCamelCase() string {
@@ -17,7 +17,6 @@ func (s Step) NameCamelCase() string {
 	capNext := true
 	for _, c := range s.Name {
 		switch c {
-		//ignore spaces but mark the next
 		case rune(' '):
 			capNext = true
 		default:

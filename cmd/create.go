@@ -62,7 +62,7 @@ var createCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(createCmd)
 
-
 	createCmd.PersistentFlags().StringP("yaml", "y", "", "yaml file to read from")
 	createCmd.PersistentFlags().StringP("out", "o", "", "output filepath")
+	createCmd.PersistentFlags().StringP("lang", "l", "", "language to translate to")
 }

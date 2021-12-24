@@ -13,9 +13,13 @@ func TranslateGolang(steps []models.Step) (bytes.Buffer, error) {
 	stepDefs := bytes.Buffer{}
 	stepDefs.WriteString("\tsteps := []Prompt{}\n")
 	out.WriteString(header())
-	for _, step := range steps {
+	for i, step := range steps {
 		out.WriteString(fmt.Sprintf("\ntype %s struct {}\n", step.NameCamelCase()))
-		out.WriteString(fmt.Sprintf("func (%s %s) Step() {\n\t\tfmt.Println(\"%s\")\n}\n", strings.ToLower(step.Name[0:1]), step.NameCamelCase(), step.Description))
+		out.WriteString(fmt.Sprintf("func (%s %s) Step() {\n\tfmt.Println(\"step %v\")\n\tfmt.Println(\"%s\")\n", strings.ToLower(step.Name[0:1]), step.NameCamelCase(), i+1, step.Description))
+		for _, cmd := range step.Cmds {
+			out.WriteString(fmt.Sprintf("\tfmt.Println(\" ex. %s\")\n", cmd))
+		}
+		out.WriteString("}\n")
 		stepDefs.WriteString(fmt.Sprintf("\tsteps = append(steps, %s{})\n", step.NameCamelCase()))
 	}
 	out.WriteString("func main() {\n\tinput := bufio.NewScanner(os.Stdin)\n")
@@ -38,3 +42,5 @@ type Prompt interface {
 }
 	`
 }
+
+//do-nothing.exe -y C:\go\src\github.com\caleb-noodahl\do-nothing\examples\getting-started.yaml -o C:\go\src\github.com\caleb-noodahl\do-nothing\output\getting-started.go
