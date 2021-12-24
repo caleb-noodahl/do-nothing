@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/caleb-noodahl/do-nothing/models"
 	"github.com/caleb-noodahl/do-nothing/translator"
@@ -35,12 +36,16 @@ var createCmd = &cobra.Command{
 		var (
 			path         string
 			out          string
+			lang         string
 			yamlContents []byte
 			steps        []models.Step
 		)
 
 		path, _ = cmd.Flags().GetString("yaml")
+		split := strings.Split(path, ".")
+		name := split[len(split)-2]
 		out, _ = cmd.Flags().GetString("out")
+		lang, _ = cmd.Flags().GetString("lang")
 		yamlContents, _ = os.ReadFile(path)
 
 		fmt.Printf("reading from: %s\nwriting to: %s\n", path, out)
@@ -48,14 +53,25 @@ var createCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		data, err := translator.TranslateGolang(steps)
-		if err != nil {
-			log.Fatal(err)
+		switch lang {
+		case "go":
+			data, err := translator.TranslateGolang(steps)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if err := os.WriteFile(out, data.Bytes(), 0644); err != nil {
+				log.Fatal(err)
+			}
+		case "markdown":
+			data, err := translator.TranslateMarkdown(name, steps)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if err := os.WriteFile(out, data.Bytes(), 0644); err != nil {
+				log.Fatal(err)
+			}
 		}
 
-		if err := os.WriteFile(out, data.Bytes(), 0644); err != nil {
-			log.Fatal(err)
-		}
 	},
 }
 

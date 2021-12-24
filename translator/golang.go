@@ -42,5 +42,3 @@ type Prompt interface {
 }
 	`
 }
-
-//do-nothing.exe -y C:\go\src\github.com\caleb-noodahl\do-nothing\examples\getting-started.yaml -o C:\go\src\github.com\caleb-noodahl\do-nothing\output\getting-started.go
